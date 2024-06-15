@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Card</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 320px;
+            text-align: center;
+            margin-top: 20px;
+            border: 2px solid #333; /* Add this line to add a border */
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+            font-size: 24px;
+        }
+
+        .card .details {
+            text-align: left;
+            font-size: 18px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .card .details .title {
+            font-weight: bold;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .card .details .title span {
+            flex: 1;
+        }
+
+        .card .details .title span:first-child {
+            flex: 0 0 140px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>OM NAMH SHIVA ENTERPRISES</h1>
+</header>
+<div class="card">
+    <img th:src="${person.imageSrc}" alt="Employee Photo" style="width: 100px; height: 100px; border-radius: 50%;">
+    <h2 th:text="${person.name}">Employee Name</h2>
+    <div class="details">
+        <div class="title"><span>AUTH. AS</span>:<span th:text="${person.auth}"></span></div>
+        <div class="title"><span>CONTACT</span>:<span th:text="${person.contact}"></span></div>
+        <div class="title"><span>BLOOD GR.</span>:<span th:text="${person.bloodGr}"></span></div>
+        <div class="title"><span>FORM O</span>:<span th:text="${person.formO}"></span></div>
+        <div class="title"><span>FORM A</span>:<span th:text="${person.formA}"></span></div>
+        <div class="title"><span>VTC</span>:<span th:text="${person.vtc}"></span></div>
+    </div>
+</div>
+</body>
+</html>
