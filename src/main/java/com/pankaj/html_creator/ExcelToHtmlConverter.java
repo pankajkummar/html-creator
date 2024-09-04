@@ -28,12 +28,12 @@ public class ExcelToHtmlConverter {
 
 
     public void convert() {
-        List<MechinalDepartment> people = readExcelFile(excelFilePath);
+        List<GenericClass> people = readExcelFile(excelFilePath);
         generateHtmlFiles(people, htmlTemplatePath);
     }
 
-    private List<MechinalDepartment> readExcelFile(String filePath) {
-        List<MechinalDepartment> people = new ArrayList<>();
+    private List<GenericClass> readExcelFile(String filePath) {
+        List<GenericClass> people = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
@@ -68,7 +68,7 @@ public class ExcelToHtmlConverter {
 
                 String fileName = id + ".html";  // Append ".html" to the id for the file name
 
-                people.add(new MechinalDepartment(name,id,designation,authorization,fromA,ime,dob,doj,sop,vtc,imageName,fileName));
+                people.add(new GenericClass(imageName,fileName,name,id,designation,authorization,fromA,ime,dob,doj,sop,vtc));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,7 +114,7 @@ public class ExcelToHtmlConverter {
         }
     }
 
-    private void generateHtmlFiles(List<MechinalDepartment> people, String templateFileName) {
+    private void generateHtmlFiles(List<GenericClass> people, String templateFileName) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setSuffix(".html");
 
@@ -122,7 +122,7 @@ public class ExcelToHtmlConverter {
         templateEngine.setTemplateResolver(templateResolver);
         int i = 0;
 
-        for (MechinalDepartment person : people) {
+        for (GenericClass person : people) {
             Context context = new Context();
             context.setVariable("person", person);
 
