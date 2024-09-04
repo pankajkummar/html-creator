@@ -6,6 +6,11 @@
     <title>Employee Card</title>
     <link rel="stylesheet" href="styles/main.css">
     <style>
+        @font-face {
+            font-family: 'Copperplate';
+            src: local('Copperplate'), local('Copperplate Gothic Bold');
+        }
+
         body {
             font-family: Arial, sans-serif;
             display: flex;
@@ -16,23 +21,47 @@
             background-color: #f4f4f4;
             margin: 0;
         }
+
         header {
-            background-color: #333;
-            color: #fff;
+            background-color: #e7a20dec;
+            color: #000000;
             padding: 10px;
-            text-align: center;
             width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 20px; /* Add padding to align text and image to the left */
+            padding-right: 20px; /* Add padding to align text and image to the right */
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .header-container img {
+            height: 80px; /* Adjust the size of the logo */
+        }
+
+        .header-container h1 {
+            flex-grow: 1;
+            text-align: center;
+            margin: 0;
+            font-family: 'Copperplate', 'Arial Black', sans-serif; /* Change font to Copperplate */
+            /* Make the text italic */
         }
 
         .card {
-            background: #fff;
+            background: #eff8f8;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             padding: 20px;
-            width: 320px;
+            width: 330px;
             text-align: center;
             margin-top: 20px;
-            border: 2px solid #333; /* Add this line to add a border */
+            border: 2px solid #333;
         }
 
         .card h2 {
@@ -42,7 +71,7 @@
 
         .card .details {
             text-align: left;
-            font-size: 18px;
+            font-size: 16px;
             color: #333;
             margin-top: 20px;
         }
@@ -52,6 +81,7 @@
             color: #555;
             display: flex;
             justify-content: space-between;
+            margin-bottom: 10px; /* Add this line to increase space between titles */
         }
 
         .card .details .title span {
@@ -65,18 +95,21 @@
 </head>
 <body>
 <header>
-    <h1>OM NAMH SHIVA ENTERPRISES</h1>
+    <div class="header-container">
+
+        <h1><b>THRIVENI SAINIK MINING PRIVATE LIMITED</b></h1>
+
+    </div>
 </header>
 <div class="card">
-    <img th:src="${person.imageSrc}" alt="Employee Photo" style="width: 100px; height: 100px; border-radius: 50%;">
+    <img th:src="${person.imageName}" alt="Employee Photo" style="width: 100px; height: 100px; border-radius: 50%;">
     <h2 th:text="${person.name}">Employee Name</h2>
     <div class="details">
-        <div class="title"><span>AUTH. AS</span>:&nbsp;<span th:text="${person.auth}"></span></div>
-        <div class="title"><span>CONTACT</span>:&nbsp;<span th:text="${person.contact}"></span></div>
-        <div class="title"><span>BLOOD GR.</span>:&nbsp;<span th:text="${person.bloodGr}"></span></div>
-        <div class="title"><span>FORM O</span>:&nbsp;<span th:text="${person.formO}"></span></div>
-        <div class="title"><span>FORM A</span>:&nbsp;<span th:text="${person.formA}"></span></div>
-        <div class="title"><span>VTC</span>:&nbsp;<span th:text="${person.vtc}"></span></div>
+        <div class="title"><span> EMPLOYEE ID</span>:&nbsp;<span th:text="${person.id}"></span></div>
+        <div class="title"><span> DEPARTMENT</span>:&nbsp; <span th:text="${person.authorized_as}"></span></div>
+        <div class="title"><span> BLOOD GROUP</span>:&nbsp; <span th:text="${person.bloodGroup}"></span></div>
+        <div class="title"><span> DESIGNATION</span>:&nbsp; <span th:text="${person.designation}"></span></div>
+
     </div>
 </div>
 </body>

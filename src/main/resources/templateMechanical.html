@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee Card</title>
+    <link rel="stylesheet" href="styles/main.css">
+    <style>
+        @font-face {
+            font-family: 'Copperplate';
+            src: local('Copperplate'), local('Copperplate Gothic Bold');
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background-color: #f4f4f4;
+            margin: 0;
+        }
+
+        header {
+            background-color: #e7a20dec;
+            color: #000000;
+            padding: 10px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-left: 20px; /* Add padding to align text and image to the left */
+            padding-right: 20px; /* Add padding to align text and image to the right */
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .header-container img {
+            height: 80px; /* Adjust the size of the logo */
+        }
+
+        .header-container h1 {
+            flex-grow: 1;
+            text-align: center;
+            margin: 0;
+            font-family: 'Copperplate', 'Arial Black', sans-serif; /* Change font to Copperplate */
+            /* Make the text italic */
+        }
+
+        .card {
+            background: #eff8f8;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 330px;
+            text-align: center;
+            margin-top: 20px;
+            border: 2px solid #333;
+        }
+
+        .card h2 {
+            margin: 0 0 10px;
+            font-size: 24px;
+        }
+
+        .card .details {
+            text-align: left;
+            font-size: 16px;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .card .details .title {
+            font-weight: bold;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px; /* Add this line to increase space between titles */
+        }
+
+        .card .details .title span {
+            flex: 1;
+        }
+
+        .card .details .title span:first-child {
+            flex: 0 0 140px;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <div class="header-container">
+
+        <h1><b>THRIVENI SAINIK MINING PRIVATE LIMITED</b></h1>
+
+    </div>
+</header>
+<div class="card">
+    <img th:src="${person.image}" alt="Employee Photo" style="width: 100px; height: 100px; border-radius: 50%;">
+    <h2 th:text="${person.name}">Employee Name</h2>
+    <div class="details">
+        <div class="title"><span> DESIGNATION</span>:&nbsp;<span th:text="${person.designation}"></span></div>
+        <div class="title"><span> EMPLOYEE ID</span>:&nbsp; <span th:text="${person.id}"></span></div>
+        <div class="title"><span> AUTH. NO.</span>:&nbsp; <span th:text="${person.authorizationNo}"></span></div>
+        <div class="title"><span> FORM A</span>:&nbsp; <span th:text="${person.formA}"></span></div>
+        <div class="title"><span> IME</span>:&nbsp; <span th:text="${person.ime}"></span></div>
+        <div class="title"><span> DOB</span>:&nbsp; <span th:text="${person.dob}"></span></div>
+        <div class="title"><span> DOJ</span>:&nbsp; <span th:text="${person.doj}"></span></div>
+        <div class="title"><span> SOP SL. NO.</span>:&nbsp; <span th:text="${person.sop}"></span></div>
+        <div class="title"><span> VTC</span>:&nbsp; <span th:text="${person.vtc}"></span></div>
+    </div>
+</div>
+</body>
+</html>

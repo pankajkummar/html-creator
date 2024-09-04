@@ -25,74 +25,15 @@ public class ExcelToHtmlConverter {
     @Value("${html.template.path}")
     String htmlTemplatePath;
 
-    public static class Person {
-        private String imageSrc;
-        private String name;
-        private String auth;
-        private String contact;
-        private String bloodGr;
-        private String formO;
-        private String formA;
-        private String vtc;
-        private String fileName;
 
-        // Constructors, getters, and setters
-        public Person(String imageSrc, String name, String auth, String contact, String bloodGr, String formO, String formA, String vtc, String fileName) {
-            this.imageSrc = imageSrc;
-            this.name = name;
-            this.auth = auth;
-            this.contact = contact;
-            this.bloodGr = bloodGr;
-            this.formO = formO;
-            this.formA = formA;
-            this.vtc = vtc;
-            this.fileName = fileName;
-        }
-
-        public String getImageSrc() {
-            return imageSrc;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public String getAuth() {
-            return auth;
-        }
-
-        public String getContact() {
-            return contact;
-        }
-
-        public String getBloodGr() {
-            return bloodGr;
-        }
-
-        public String getFormO() {
-            return formO;
-        }
-
-        public String getFormA() {
-            return formA;
-        }
-
-        public String getVtc() {
-            return vtc;
-        }
-
-        public String getFileName() {
-            return fileName;
-        }
-    }
 
     public void convert() {
-        List<Person> people = readExcelFile(excelFilePath);
+        List<MechinalDepartment> people = readExcelFile(excelFilePath);
         generateHtmlFiles(people, htmlTemplatePath);
     }
 
-    private List<Person> readExcelFile(String filePath) {
-        List<Person> people = new ArrayList<>();
+    private List<MechinalDepartment> readExcelFile(String filePath) {
+        List<MechinalDepartment> people = new ArrayList<>();
 
         try (FileInputStream fis = new FileInputStream(filePath);
              Workbook workbook = new XSSFWorkbook(fis)) {
@@ -105,20 +46,29 @@ public class ExcelToHtmlConverter {
                 rowIterator.next();
             }
 
+            FormulaEvaluator evaluator = workbook.getCreationHelper().createFormulaEvaluator();
+
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
 
-                String imageSrc = getCellValueAsString(row.getCell(0));
-                String name = getCellValueAsString(row.getCell(1));
-                String auth = getCellValueAsString(row.getCell(2));
-                String contact = getCellValueAsString(row.getCell(3));
-                String bloodGr = getCellValueAsString(row.getCell(4));
-                String formO = getCellValueAsString(row.getCell(5));
-                String formA = getCellValueAsString(row.getCell(6));
-                String vtc = getCellValueAsString(row.getCell(7));
-                String fileName = getCellValueAsString(row.getCell(8));
+                String name = getCellValueAsString(row.getCell(1), evaluator);
+                String designation = getCellValueAsString(row.getCell(2), evaluator);
+                String id = getCellValueAsString(row.getCell(3),evaluator); //vtc
+                String authorization = getCellValueAsString(row.getCell(4), evaluator);
+                String fromA = getCellValueAsString(row.getCell(5), evaluator); //form A
+                String ime = getCellValueAsString(row.getCell(6), evaluator); //IME
+                String dob = getCellValueAsString(row.getCell(7), evaluator); //PME
+                String doj = getCellValueAsString(row.getCell(8), evaluator); //SOP SL NO
+                String sop = getCellValueAsString(row.getCell(9), evaluator);
+                String vtc = getCellValueAsString(row.getCell(10), evaluator);
+               // String imageName = "Images/" + getCellValueAsString(row.getCell(2), evaluator).toLowerCase().replace(" ","")+".jpeg";
+                String imageName = "Images/dummy.jpeg";
 
-                people.add(new Person(imageSrc, name, auth, contact, bloodGr, formO, formA, vtc, fileName));
+                // String imageName = getCellValueAsString(row.getCell(21), evaluator).replace(" ","");
+
+                String fileName = id + ".html";  // Append ".html" to the id for the file name
+
+                people.add(new MechinalDepartment(name,id,designation,authorization,fromA,ime,dob,doj,sop,vtc,imageName,fileName));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -127,7 +77,7 @@ public class ExcelToHtmlConverter {
         return people;
     }
 
-    private String getCellValueAsString(Cell cell) {
+    private String getCellValueAsString(Cell cell, FormulaEvaluator evaluator) {
         if (cell == null) {
             return "";
         }
@@ -144,7 +94,19 @@ public class ExcelToHtmlConverter {
             case BOOLEAN:
                 return String.valueOf(cell.getBooleanCellValue());
             case FORMULA:
-                return cell.getCellFormula();
+                CellValue cellValue = evaluator.evaluate(cell);
+                switch (cellValue.getCellType()) {
+                    case STRING:
+                        return cellValue.getStringValue();
+                    case NUMERIC:
+                        return String.valueOf((int) cellValue.getNumberValue());
+                    case BOOLEAN:
+                        return String.valueOf(cellValue.getBooleanValue());
+                    case ERROR:
+                        return FormulaError.forInt(cellValue.getErrorValue()).getString();
+                    default:
+                        return "";
+                }
             case BLANK:
                 return "";
             default:
@@ -152,24 +114,22 @@ public class ExcelToHtmlConverter {
         }
     }
 
-    private void generateHtmlFiles(List<Person> people, String templateFileName) {
+    private void generateHtmlFiles(List<MechinalDepartment> people, String templateFileName) {
         ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setSuffix(".html");
 
         TemplateEngine templateEngine = new TemplateEngine();
         templateEngine.setTemplateResolver(templateResolver);
+        int i = 0;
 
-        // Define the output directory
-        int i = 1;
-
-        for (Person person : people) {
+        for (MechinalDepartment person : people) {
             Context context = new Context();
             context.setVariable("person", person);
 
             String outputFileName = outputDir + person.getFileName();
             try (FileWriter writer = new FileWriter(outputFileName)) {
                 templateEngine.process(templateFileName, context, writer);
-                System.out.println("******** " + i++ + " Created HTML file " + person.getFileName() + " successfully *************");
+                System.out.println(i++ + "Created HTML file " + person.getFileName() + " successfully");
             } catch (IOException e) {
                 e.printStackTrace();
             }
